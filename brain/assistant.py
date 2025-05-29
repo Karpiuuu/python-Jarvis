@@ -2,24 +2,28 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from commands.registry import get_commands_json
+
 load_dotenv()
 client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
 
 def classify_intent(text: str) -> tuple[str, str]:
     try:
+        system_message = (
+            "Jesteś głosowym asystentem Jarvis. "
+            "Twoim zadaniem jest rozpoznanie, czy użytkownik chce wykonać jedną z dostępnych komend, czy prowadzi zwykłą rozmowę.\n\n"
+            "Jeśli wypowiedź użytkownika pasuje do jakiejkolwiek z dostępnych komend, "
+            "odpowiedz tylko w formacie: `COMMAND: <nazwa_komendy> [argumenty opcjonalne]`\n"
+            "Jeśli użytkownik zadaje pytanie niezwiązane z komendami – odpowiadaj normalnie, ale poprzedź odpowiedź `CHAT:`.\n\n"
+            "Lista dostępnych komend (name + description):\n"
+            f"{get_commands_json()}\n\n"
+            "Pamiętaj – zawsze zaczynaj odpowiedź od `COMMAND:` lub `CHAT:`.\n"
+        )
+
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=[
-                {"role": "system", "content":
-                    (
-                        "Twoim zadaniem jest klasyfikacja wypowiedzi użytkownika. "
-                        "Jeśli wypowiedź to polecenie (np. 'otwórz YouTube', 'pokaż pogodę w Kłodzku'), "
-                        "zwróć tylko w formacie: COMMAND: <nazwa_komendy> [argumenty]\n"
-                        "Przykład: COMMAND: open_weather klodzko\n"
-                        "Jeśli to zwykłe pytanie lub rozmowa, zwróć w formacie: CHAT: <odpowiedź>\n"
-                        "Nie używaj języka naturalnego w odpowiedziach dla komend – tylko nazwy komend!"
-                    )
-                },
+                {"role": "system", "content": system_message},
                 {"role": "user", "content": text},
             ],
         )

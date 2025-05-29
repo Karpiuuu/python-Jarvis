@@ -1,20 +1,23 @@
-
 from commands.youtube import OpenYouTubeCommand
+from commands.show_commands import ShowCommands
+import json
 
 COMMANDS = [
     OpenYouTubeCommand(),
+    ShowCommands(),
 ]
 
-def execute_command(classified_text):
-    if not classified_text:
-        return None
+def get_commands_json() -> str:
+    data = [
+        {"name": cmd.name, "description": cmd.description}
+        for cmd in COMMANDS
+    ]
+    return json.dumps(data, ensure_ascii=False, indent=2)
 
-    parts = classified_text.split(" ", 1)
-    command_name = parts[0]
-    command_arg = parts[1] if len(parts) > 1 else ""
-
+def execute_command(name: str, argument: str = "") -> str | None:
     for command in COMMANDS:
-        if hasattr(command, "name") and command.name == command_name:
-            return command.execute(command_arg)
-
+        if getattr(command, "name", None) == name:
+            if name == "show_commands":
+                return command.execute(argument, COMMANDS)
+            return command.execute(argument)
     return None
