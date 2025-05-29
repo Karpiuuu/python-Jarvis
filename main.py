@@ -10,7 +10,7 @@ mic_stream = start_background_recording()
 
 def jarvis_callback():
     print("🧠 Jarvis")
-    # speak("Jarvis")
+    speak("Słucham")
 
 
     save_last_audio()

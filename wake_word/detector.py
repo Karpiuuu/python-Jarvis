@@ -26,7 +26,7 @@ def listen_for_jarvis(callback):
 
             result = porcupine.process(pcm)
             if result >= 0:
-                callback()  # po wykryciu wywołujemy funkcję
+                callback()
 
     except KeyboardInterrupt:
         print("🛑 Zatrzymano nasłuchiwanie.")
