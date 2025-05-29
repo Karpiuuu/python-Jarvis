@@ -2,7 +2,8 @@ from wake_word.detector import listen_for_jarvis
 from voice.speaker import speak
 from speech.recorder import start_background_recording, save_last_audio
 from speech.recognizer import transcribe
-from brain.assistant import ask_openai
+from brain.assistant import classify_intent
+from commands.registry import execute_command
 
 
 mic_stream = start_background_recording()
@@ -16,9 +17,22 @@ def jarvis_callback():
 
     user_text = transcribe()
     print(f"👤 Użytkownik powiedział: {user_text}")
-    ai_response = ask_openai(user_text)
-    speak(ai_response)
-    print(f"🤖 Jarvis odpowiedział: {ai_response}")
+    
+    intent, data = classify_intent(user_text)
+    
+    
+    
+    if intent == "COMMAND":
+        result = execute_command(data)
+        if result:
+            speak(result)
+        else:
+            speak("Nie rozumiem tej komendy.")
+    elif intent == "CHAT":
+        speak(data)
+    else:
+        speak("Nie jestem pewien, jak odpowiedzieć.")
+    print(f"🗣 Odpowiedź: {data}")
 
 if __name__ == "__main__":
     listen_for_jarvis(jarvis_callback)
