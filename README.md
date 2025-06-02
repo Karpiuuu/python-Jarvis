@@ -24,19 +24,56 @@ Celem jest stworzenie asystenta, który:
 
 ### Klonowanie repozytorium
 ```bash
-git clone https://github.com/twoj-username/python-jarvis.git
+git clone https://github.com/Karpiuuu/python-Jarvis/
 cd python-jarvis
 ```
+
+### Wymagania systemowe
+Przed instalacją upewnij się, że masz:
+- Python 3.8 lub nowszy
+- W przypadku systemów Linux/Mac: portaudio zainstalowane
+
+#### Instalacja PortAudio (dla PyAudio):
+- **Windows**: PyAudio powinien zainstalować się bez dodatkowych kroków
+- **MacOS**: `brew install portaudio`
+- **Linux (Ubuntu/Debian)**: `sudo apt-get install python3-pyaudio portaudio19-dev`
 
 ### Instalacja zależności
 ```bash
 pip install -r requirements.txt
+
 ```
+### Gdyby zależności się nie doinstalowały
+```bash
+pip install openai pyttsx3 pyaudio sounddevice scipy
+pip install git+https://github.com/openai/whisper.git
+pip install pvporcupine numpy
+
+pip install PyAudio‑0.2.11‑cp311‑cp311‑win_amd64.whl
+```
+
+### Link do doinstalowania biblioteki odpowiedzialnej za TTS
+```bash
+https://ffmpeg.org/download.html
+```
+
+### Konfiguracja API
+1. Utwórz plik `.env` w głównym katalogu projektu
+2. Dodaj swoje klucze API:
+   ```
+   DEEPSEEK_API_KEY=twój_klucz_deepseek
+   ```
+3. W pliku `wake_word/detector.py` zastąp istniejący klucz dostępu do Porcupine swoim własnym, dostępnym na stronie [Picovoice Console](https://console.picovoice.ai/)
 
 ### Uruchomienie
 ```bash
 python main.py
 ```
+
+### Rozwiązywanie problemów
+- Jeśli wystąpią problemy z instalacją PyAudio, wypróbuj pakiety prebuilt:
+  - Windows: `pip install pipwin && pipwin install pyaudio`
+  - Lub użyj wheel dostępnego na stronie [Unofficial Windows Binaries for Python](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio)
 
 ### Użycie
 1. Powiedz "Jarvis", aby aktywować asystenta.
@@ -65,7 +102,7 @@ python main.py
 
 ## Organizacja kodu
 - **brain/** - interpretacja intencji.
-- **commands/** - definicje komend.
+- **commands/** - definicje komend, w tym struktura danych `Command`.
 - **speech/** - przetwarzanie mowy.
 - **voice/** - synteza mowy.
 - **wake_word/** - wykrywanie słowa kluczowego.
@@ -76,9 +113,9 @@ Projekt zawiera testy jednostkowe, które pokrywają kluczowe funkcjonalności, 
 
 ## Wnioski
 Jarvis to solidna podstawa dla asystenta głosowego. Możliwe usprawnienia obejmują:
-- Rozszerzenie zestawu komend.
+- Rozszerzenie zestawu komend z wykorzystaniem klasy `Command`.
 - Personalizację asystenta.
 - Integrację z urządzeniami smart home.
 - Tryb offline.
 
-Jarvis jest modularny i łatwy w rozbudowie, co czyni go idealnym projektem do dalszego rozwoju.  
+Jarvis jest modularny i łatwy w rozbudowie, co czyni go idealnym projektem do dalszego rozwoju.
