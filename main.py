@@ -10,7 +10,7 @@ mic_stream = start_background_recording()
 
 def jarvis_callback():
     print("🧠 Jarvis")
-    speak("Słucham")
+    speak("Słucham?")
 
 
     save_last_audio()
@@ -19,8 +19,6 @@ def jarvis_callback():
     print(f"👤 Użytkownik powiedział: {user_text}")
     
     intent, data = classify_intent(user_text)
-    
-    
     
     if intent == "COMMAND":
         result = execute_command(data)
